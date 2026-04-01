@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Encuentra autoescuelas cerca de ti — Cambia de Marcha">
+<title>Autoescuelas Cercanas — Cambia de Marcha</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9881186716073145" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg:#08090f; --bg2:#0e1120;
+  --amber:#e8a020; --amber2:#ffcc44;
+  --green:#20e8a0;
+  --text:#d4cfc4; --dim:#556070;
+  --border:rgba(42,49,72,0.7);
+  --fd:'Bebas Neue',sans-serif;
+  --fu:'Rajdhani',sans-serif;
+  --fm:'Share Tech Mono',monospace;
+}
+html,body { background:var(--bg); color:var(--text); font-family:var(--fu); }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 32px; height:54px;
+  background:rgba(8,9,15,0.95);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+}
+.nav-logo { font-family:var(--fd); font-size:1.3rem; letter-spacing:.1em; color:var(--amber); text-decoration:none; }
+.nav-back {
+  font-family:var(--fm); font-size:.6rem; letter-spacing:.18em;
+  color:var(--dim); text-decoration:none; transition:color .2s;
+  display:flex; align-items:center; gap:6px;
+}
+.nav-back:hover { color:var(--amber); }
+
+/* PAGE */
+.page {
+  max-width:860px; margin:0 auto;
+  padding:90px 24px 80px;
+}
+.page-label {
+  font-family:var(--fm); font-size:.56rem; letter-spacing:.3em;
+  color:var(--amber); margin-bottom:12px; text-align:center;
+}
+.page-title {
+  font-family:var(--fd); font-size:clamp(2.2rem,5vw,3.5rem);
+  letter-spacing:.1em; color:var(--text);
+  text-align:center; margin-bottom:8px;
+}
+.page-sub {
+  font-family:var(--fu); font-size:.95rem; color:var(--dim);
+  text-align:center; margin-bottom:44px; line-height:1.5;
+}
+
+/* SEARCH */
+.search-box {
+  display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;
+}
+.search-input {
+  flex:1; min-width:180px;
+  font-family:var(--fm); font-size:.68rem; letter-spacing:.08em;
+  padding:14px 20px; border-radius:30px;
+  background:rgba(14,17,32,.95); border:1px solid var(--border);
+  color:var(--text); outline:none; transition:border-color .2s;
+}
+.search-input::placeholder { color:var(--dim); }
+.search-input:focus { border-color:var(--amber); }
+.btn {
+  font-family:var(--fd); font-size:1rem; letter-spacing:.1em;
+  padding:14px 24px; border-radius:30px; border:2px solid;
+  cursor:pointer; transition:all .2s; white-space:nowrap;
+}
+.btn-gps { border-color:var(--amber); color:var(--amber); background:rgba(232,160,32,.08); }
+.btn-gps:hover { background:rgba(232,160,32,.2); }
+.btn-search { border-color:none; background:var(--amber); color:#08090f; border:none; }
+.btn-search:hover { background:var(--amber2); box-shadow:0 0 20px rgba(232,160,32,.4); }
+
+.status {
+  font-family:var(--fm); font-size:.58rem; letter-spacing:.14em;
+  color:var(--dim); margin-bottom:16px; min-height:16px;
+}
+.status.ok  { color:var(--green); }
+.status.err { color:#e82050; }
+
+/* MAP */
+.map-wrap {
+  border-radius:16px; overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+}
+.map-wrap iframe { width:100%; height:460px; border:none; display:block; }
+.map-empty {
+  height:460px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  background:rgba(14,17,32,.6);
+}
+.map-empty-icon { font-size:3rem; opacity:.35; }
+.map-empty p { font-family:var(--fu); font-size:.9rem; color:var(--dim); text-align:center; line-height:1.6; }
+
+.btn-maps {
+  display:none; margin:20px auto 0;
+  font-family:var(--fd); font-size:1.05rem; letter-spacing:.1em;
+  padding:13px 32px; border-radius:30px;
+  border:2px solid var(--green); color:var(--green);
+  background:rgba(32,232,160,.08); cursor:pointer; transition:all .2s;
+}
+.btn-maps:hover { background:rgba(32,232,160,.18); transform:translateY(-2px); }
+
+/* AD */
+.ad-wrap { margin:40px 0; text-align:center; }
+
+/* FOOTER */
+footer {
+  border-top:1px solid var(--border);
+  padding:28px 32px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:10px;
+  background:rgba(6,7,16,.9);
+}
+.footer-copy { font-family:var(--fm); font-size:.5rem; letter-spacing:.15em; color:var(--dim); }
+.footer-links { display:flex; gap:18px; }
+.footer-links a { font-family:var(--fm); font-size:.5rem; letter-spacing:.12em; color:var(--dim); text-decoration:none; transition:color .2s; }
+.footer-links a:hover { color:var(--amber); }
+
+@media(max-width:600px) {
+  nav { padding:0 16px; }
+  .search-box { flex-direction:column; }
+  .btn { width:100%; }
+  footer { justify-content:center; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">CAMBIA DE MARCHA</a>
+  <a class="nav-back" href="index.html">← VOLVER AL INICIO</a>
+</nav>
+
+<div class="page">
+
+  <p class="page-label">— ENCUENTRA TU AUTOESCUELA —</p>
+  <h1 class="page-title">AUTOESCUELAS CERCANAS</h1>
+  <p class="page-sub">Escribe tu ciudad o usa tu ubicación para encontrar autoescuelas cerca de ti.</p>
+
+  <div class="search-box">
+    <input class="search-input" id="searchInput" type="text"
+      placeholder="Ciudad o código postal..."
+      onkeydown="if(event.key==='Enter')buscar()">
+    <button class="btn btn-gps" onclick="usarGPS()">📍 Mi ubicación</button>
+    <button class="btn btn-search" onclick="buscar()">BUSCAR</button>
+  </div>
+
+  <p class="status" id="status"></p>
+
+  <div class="map-wrap" id="mapWrap">
+    <div class="map-empty" id="mapEmpty">
+      <div class="map-empty-icon">🗺️</div>
+      <p>Introduce tu ciudad o pulsa "Mi ubicación"<br>para ver autoescuelas cerca de ti</p>
+    </div>
+  </div>
+
+  <button class="btn-maps" id="btnMaps" onclick="abrirMaps()">
+    🗺️ ABRIR EN GOOGLE MAPS
+  </button>
+
+  <div class="ad-wrap">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9881186716073145"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-copy">© 2025 CAMBIADEMARCHA.ES</span>
+  <div class="footer-links">
+    <a href="aviso-legal.html">Aviso legal</a>
+    <a href="privacidad.html">Privacidad</a>
+    <a href="cookies.html">Cookies</a>
+    <a href="/cdn-cgi/l/email-protection#0a63666b786d636b6e6f79636d64794a6d676b636624696567">Contacto</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+let lastQuery = '';
+
+function setStatus(msg, type=''){
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status' + (type ? ' '+type : '');
+}
+
+function mostrarMapa(query){
+  lastQuery = query;
+  const q = encodeURIComponent('autoescuela ' + query);
+  document.getElementById('mapWrap').innerHTML =
+    `<iframe src="https://maps.google.com/maps?q=${q}&output=embed&z=14"
+      loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+  document.getElementById('btnMaps').style.display = 'block';
+}
+
+function buscar(){
+  const val = document.getElementById('searchInput').value.trim();
+  if(!val){ setStatus('Introduce una ciudad o código postal.','err'); return; }
+  setStatus('Buscando en ' + val + '...');
+  mostrarMapa(val);
+  setStatus('Autoescuelas en ' + val, 'ok');
+}
+
+function usarGPS(){
+  if(!navigator.geolocation){ setStatus('Tu navegador no soporta geolocalización.','err'); return; }
+  setStatus('Obteniendo tu ubicación...');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      mostrarMapa(pos.coords.latitude + ',' + pos.coords.longitude);
+      setStatus('Autoescuelas cerca de tu ubicación', 'ok');
+    },
+    () => setStatus('No se pudo obtener la ubicación. Escribe tu ciudad.','err')
+  );
+}
+
+function

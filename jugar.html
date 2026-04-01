@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aprende a conducir un coche manual — Simulador gratuito de embrague, marchas y arranque en pendiente.">
+<title>Jugar — Cambia de Marcha</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9881186716073145" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg:#08090f; --bg2:#0e1120;
+  --amber:#e8a020; --amber2:#ffcc44;
+  --green:#20e8a0; --red:#e82050;
+  --text:#d4cfc4; --dim:#556070;
+  --border:rgba(42,49,72,0.7);
+  --fd:'Bebas Neue',sans-serif;
+  --fu:'Rajdhani',sans-serif;
+  --fm:'Share Tech Mono',monospace;
+}
+html,body { background:var(--bg); color:var(--text); font-family:var(--fu); overflow-x:hidden; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 32px; height:54px;
+  background:rgba(8,9,15,0.95); border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+}
+.nav-logo { font-family:var(--fd); font-size:1.3rem; letter-spacing:.1em; color:var(--amber); text-decoration:none; }
+.nav-back { font-family:var(--fm); font-size:.6rem; letter-spacing:.18em; color:var(--dim); text-decoration:none; transition:color .2s; }
+.nav-back:hover { color:var(--amber); }
+
+/* HERO */
+.hero {
+  padding:100px 20px 40px;
+  text-align:center;
+  background:radial-gradient(ellipse at 50% 0%, #1a2240 0%, #08090f 60%);
+  border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(232,160,32,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,160,32,.03) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 20%, transparent 70%);
+  pointer-events:none;
+}
+.hero-label { font-family:var(--fm); font-size:.56rem; letter-spacing:.3em; color:var(--amber); margin-bottom:14px; }
+.hero-title { font-family:var(--fd); font-size:clamp(2.5rem,6vw,4.5rem); letter-spacing:.1em; color:var(--text); margin-bottom:16px; }
+.hero-sub { font-family:var(--fu); font-size:1rem; color:var(--dim); max-width:500px; margin:0 auto 40px; line-height:1.6; }
+
+/* MODE CARDS */
+.mode-cards { display:flex; gap:24px; flex-wrap:wrap; justify-content:center; margin-bottom:16px; }
+.mode-card {
+  width:280px; padding:32px 24px; border-radius:18px;
+  background:rgba(14,17,32,0.95); border:2px solid var(--border);
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  text-align:center; text-decoration:none; cursor:pointer;
+  transition:all .25s; min-height:280px;
+}
+.mode-card:hover { transform:translateY(-5px); }
+.mode-card.free:hover { border-color:var(--amber); box-shadow:0 16px 48px rgba(232,160,32,.2); }
+.mode-card.hill:hover { border-color:var(--green); box-shadow:0 16px 48px rgba(32,232,160,.2); }
+.mode-icon { font-size:3rem; line-height:1; }
+.mode-name { font-family:var(--fd); font-size:1.7rem; letter-spacing:.1em; color:var(--text); }
+.mode-desc { font-family:var(--fu); font-size:.85rem; color:var(--dim); line-height:1.55; flex:1; }
+.mode-btn {
+  margin-top:auto; padding:11px 32px; border-radius:24px;
+  font-family:var(--fd); font-size:1.1rem; letter-spacing:.12em;
+  border:2px solid; transition:background .2s;
+}
+.mode-card.free .mode-btn  { border-color:var(--amber); color:var(--amber); background:rgba(232,160,32,.08); }
+.mode-card.free:hover .mode-btn  { background:rgba(232,160,32,.22); }
+.mode-card.hill .mode-btn  { border-color:var(--green); color:var(--green); background:rgba(32,232,160,.08); }
+.mode-card.hill:hover .mode-btn  { background:rgba(32,232,160,.22); }
+
+/* SECTIONS */
+.section { padding:50px 20px; max-width:1000px; margin:0 auto; }
+.section.alt { background:var(--bg2); max-width:100%; padding:50px 20px; }
+.section.alt .section-inner { max-width:1000px; margin:0 auto; }
+.section-label { font-family:var(--fm); font-size:.56rem; letter-spacing:.3em; color:var(--amber); text-align:center; margin-bottom:12px; }
+.section-title { font-family:var(--fd); font-size:clamp(1.8rem,4vw,3rem); letter-spacing:.1em; text-align:center; color:var(--text); margin-bottom:48px; }
+
+/* STEPS */
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:24px; }
+.step { padding:28px 22px; border-radius:14px; background:rgba(18,24,38,.6); border:1px solid var(--border); transition:border-color .2s, transform .2s; }
+.step:hover { border-color:var(--amber); transform:translateY(-3px); }
+.step-num { font-family:var(--fd); font-size:3rem; color:rgba(232,160,32,.18); margin-bottom:10px; }
+.step-title { font-family:var(--fd); font-size:1.3rem; letter-spacing:.08em; color:var(--text); margin-bottom:8px; }
+.step-desc { font-family:var(--fu); font-size:.86rem; color:var(--dim); line-height:1.6; }
+
+/* PROFILES */
+.profiles { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.profile { width:240px; padding:26px 20px; border-radius:14px; background:rgba(8,9,15,.7); border:1px solid var(--border); text-align:center; }
+.profile-icon { font-size:2.2rem; margin-bottom:12px; }
+.profile-name { font-family:var(--fd); font-size:1.25rem; letter-spacing:.08em; color:var(--text); margin-bottom:8px; }
+.profile-desc { font-family:var(--fu); font-size:.82rem; color:var(--dim); line-height:1.55; }
+
+/* CONTROLS */
+.keys-grid { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+.key-card { display:flex; flex-direction:column; align-items:center; gap:8px; padding:18px 16px; border-radius:12px; min-width:90px; background:rgba(18,24,38,.8); border:1px solid var(--border); }
+kbd { font-family:var(--fm); font-size:1rem; padding:7px 14px; border-radius:7px; background:rgba(42,49,72,.9); border:1px solid rgba(100,120,150,.3); color:var(--amber); box-shadow:0 3px 0 rgba(0,0,0,.5); display:block; }
+.key-label { font-family:var(--fu); font-size:.78rem; color:var(--dim); letter-spacing:.06em; }
+
+/* FAQ */
+.faq-list { display:flex; flex-direction:column; gap:4px; }
+details.faq-item { border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:border-color .2s; }
+details.faq-item:hover { border-color:rgba(232,160,32,.35); }
+details.faq-item[open] { border-color:rgba(232,160,32,.5); }
+details.faq-item summary {
+  list-style:none; display:flex; justify-content:space-between; align-items:center; gap:16px;
+  padding:18px 22px; background:rgba(14,17,32,.8);
+  font-family:var(--fu); font-size:.96rem; font-weight:600; color:var(--text);
+  cursor:pointer; transition:background .2s, color .2s;
+}
+details.faq-item summary::-webkit-details-marker { display:none; }
+details.faq-item summary:hover { background:rgba(18,24,38,1); }
+details.faq-item[open] summary { color:var(--amber); background:rgba(18,24,38,1); }
+.faq-arrow { font-size:.65rem; color:var(--dim); transition:transform .3s; flex-shrink:0; }
+details.faq-item[open] .faq-arrow { transform:rotate(180deg); color:var(--amber); }
+.faq-a {
+  font-family:var(--fu); font-size:.9rem; color:var(--dim); line-height:1.75;
+  padding:16px 22px 22px; background:rgba(8,9,15,.6);
+}
+
+/* AD */
+.ad-wrap { max-width:900px; margin:0 auto; padding:40px 20px; text-align:center; border-top:1px solid var(--border); }
+
+/* FOOTER */
+footer {
+  border-top:1px solid var(--border); padding:28px 32px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  background:rgba(6,7,16,.95);
+}
+.footer-copy { font-family:var(--fm); font-size:.5rem; letter-spacing:.15em; color:var(--dim); }
+.footer-links { display:flex; gap:18px; }
+.footer-links a { font-family:var(--fm); font-size:.5rem; letter-spacing:.12em; color:var(--dim); text-decoration:none; transition:color .2s; }
+.footer-links a:hover { color:var(--amber); }
+
+@media(max-width:600px) {
+  nav { padding:0 16px; }
+  footer { justify-content:center; text-align:center; }
+  .footer-copy { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">CAMBIA DE MARCHA</a>
+  <a class="nav-back" href="index.html">← VOLVER AL INICIO</a>
+</nav>
+
+<!-- HERO + MODOS -->
+<div class="hero">
+  <p class="hero-label">— SIMULADOR GRATUITO —</p>
+  <h1 class="hero-title">ELIGE TU MODO</h1>
+  <p class="hero-sub">Practica el embrague y las marchas desde el navegador, sin instalación ni registro.</p>
+  <div class="mode-cards">
+    <div class="mode-card free" onclick="window.open('simulador-coche-manual-v2.html?modo=libre','_blank')">
+      <div class="mode-icon">🚗</div>
+      <div class="mode-name">CONDUCCIÓN LIBRE</div>
+      <div class="mode-desc">Practica las marchas, el embrague y el acelerador en carretera llana a tu ritmo. Sin presión.</div>
+      <div class="mode-btn">EMPEZAR</div>
+    </div>
+    <div class="mode-card hill" onclick="window.open('simulador-coche-manual-v2.html?modo=pendiente','_blank')">
+      <div class="mode-icon">⛰️</div>
+      <div class="mode-name">ARRANQUE EN PENDIENTE</div>
+      <div class="mode-desc">Aprende la técnica del punto de fricción para arrancar cuesta arriba sin rodar hacia atrás.</div>
+      <div class="mode-btn">EMPEZAR</div>
+    </div>
+  </div>
+</div>
+
+<!-- AD -->
+<div class="ad-wrap">
+  <ins class="adsbygoogle" style="display:block"
+    data-ad-client="ca-pub-9881186716073145" data-ad-slot="auto"
+    data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- CÓMO FUNCIONA -->
+<div class="section">
+  <p class="section-label">— MÉTODO —</p>
+  <h2 class="section-title">CÓMO FUNCIONA</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">ENTIENDE LOS PEDALES</div>
+      <div class="step-desc">Aprende qué hace cada pedal antes de ponerte nervioso en el coche real. Embrague, freno y acelerador con feedback visual en tiempo real.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">PRACTICA EL PUNTO DE FRICCIÓN</div>
+      <div class="step-desc">El punto de fricción es lo más difícil de aprender. Aquí puedes repetirlo sin miedo a calar en un cruce.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">DOMINA LA PENDIENTE</div>
+      <div class="step-desc">El modo pendiente te enseña la técnica del embrague para arrancar cuesta arriba sin rodar hacia atrás.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">LLEGA PREPARADO</div>
+      <div class="step-desc">Con la mecánica interiorizada, tus prácticas de autoescuela serán más eficientes y necesitarás menos horas para sacarte el carnet.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PARA QUIÉN -->
+<div class="section alt">
+  <div class="section-inner">
+    <p class="section-label">— AUDIENCIA —</p>
+    <h2 class="section-title">¿PARA QUIÉN ES?</h2>
+    <div class="profiles">
+      <div class="profile">
+        <div class="profile-icon">📚</div>
+        <div class="profile-name">ESTUDIANTES</div>
+        <div class="profile-desc">Estás estudiando el teórico y quieres entender cómo funciona el embrague antes de las prácticas.</div>
+      </div>
+      <div class="profile">
+        <div class="profile-icon">🚗</div>
+        <div class="profile-name">EN PRÁCTICAS</div>
+        <div class="profile-desc">Ya tienes clases pero quieres repasar en casa la coordinación de pedales entre sesión y sesión.</div>
+      </div>
+      <div class="profile">
+        <div class="profile-icon">🔄</div>
+        <div class="profile-name">REFRESCANDO</div>
+        <div class="profile-desc">Tienes carnet pero llevas años sin conducir manual y quieres recuperar el músculo de la memoria.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTROLES -->
+<div class="section" style="text-align:center">
+  <p class="section-label">— TECLADO —</p>
+  <h2 class="section-title">CONTROLES</h2>
+  <div class="keys-grid">
+    <div class="key-card"><kbd>C</kbd><span class="key-label">Embrague</span></div>
+    <div class="key-card"><kbd>W</kbd><span class="key-label">Acelerador</span></div>
+    <div class="key-card"><kbd>S</kbd><span class="key-label">Freno</span></div>
+    <div class="key-card"><kbd>1 — 5</kbd><span class="key-label">Marchas</span></div>
+    <div class="key-card"><kbd>N</kbd><span class="key-label">Neutro</span></div>
+    <div class="key-card"><kbd>Enter</kbd><span class="key-label">Motor</span></div>
+  </div>
+</div>
+
+<!-- AD -->
+<div class="ad-wrap">
+  <ins class="adsbygoogle" style="display:block"
+    data-ad-client="ca-pub-9881186716073145" data-ad-slot="auto"
+    data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- FAQ -->
+<div class="section alt">
+  <div class="section-inner">
+    <p class="section-label">— PREGUNTAS FRECUENTES —</p>
+    <h2 class="section-title">FAQ</h2>
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary>¿Por qué se cala el coche al arrancar? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">El coche se cala porque el embrague se suelta demasiado rápido antes de que el motor tenga suficientes RPM para asumir la carga. Al soltar el embrague, el motor tiene que mover el peso del coche desde parado, lo que exige mucho par. Si las RPM son bajas y el embrague se suelta de golpe, el motor no puede mantener el régimen y se para. La solución es soltar el embrague muy despacio mientras se da un poco de gas simultáneamente.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué marcha hay que usar al arrancar? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">Siempre hay que arrancar en primera marcha. La primera es la marcha con mayor reducción mecánica, lo que significa que multiplica más el par del motor y permite mover el coche desde parado con menos RPM. Arrancar en segunda o marcha superior casi siempre resulta en calar el motor.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Se puede practicar la conducción manual online? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">Sí. Cambia de Marcha es un simulador gratuito de coche manual que funciona directamente desde el navegador, sin instalación. Puedes practicar la coordinación del embrague, el acelerador y el freno, cambiar marchas y aprender a arrancar en pendiente desde casa, antes de tus prácticas de autoescuela.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué es el punto de fricción del embrague? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">El punto de fricción, también llamado punto de mordida, es el momento exacto en que las dos placas del embrague empiezan a rozar entre sí y el motor comienza a transmitir fuerza a las ruedas. Se nota porque el coche tiende a moverse ligeramente y las RPM del motor bajan un poco. Es el punto más difícil de aprender para los conductores noveles.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cómo arrancar en pendiente sin rodar hacia atrás? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">La técnica clásica: 1) Para el coche con el freno. 2) Pon primera marcha con el embrague pisado. 3) Sube el embrague hasta notar el punto de fricción. 4) Da gas suavemente al mismo tiempo. 5) Cuando sientas que el motor "tira", suelta el freno. El coche avanzará sin rodar hacia atrás. Practica esta técnica en el modo "Arranque en Pendiente".</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cuántas horas de prácticas necesito para sacarme el carnet? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">En España no existe un mínimo legal, pero la media está entre 20 y 30 horas. Los alumnos que llegan sabiendo cómo funciona el embrague suelen necesitar menos horas, ya que el instructor puede centrarse en la conducción real en lugar de explicar la mecánica básica.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Para qué sirve el embrague? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">El embrague es el mecanismo que desconecta el motor de la caja de cambios. Permite cambiar de marcha sin dañar el motor y arrancar el coche desde parado de forma suave. Cuando pisas el embrague, desconectas el motor de las ruedas. Al soltarlo poco a poco, vas conectando progresivamente la potencia del motor a las ruedas.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cuándo hay que cambiar de marcha? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">Como regla general sube de marcha entre 2000 y 2500 RPM en gasolina, y entre 1500 y 2000 RPM en diésel. En velocidad: primera hasta 20 km/h, segunda hasta 40 km/h, tercera hasta 60 km/h, cuarta hasta 90 km/h, quinta para autopista. Baja de marcha cuando las RPM caigan por debajo de 1200 RPM.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Es difícil conducir un coche manual? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">Al principio puede parecer difícil porque hay que coordinar tres pedales, la palanca y el volante. Pero con práctica se vuelve completamente automático. La mayoría de conductores afirman que tras 10-15 horas la coordinación empieza a ser natural. La clave es entender primero la mecánica — ese es el objetivo de este simulador.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué diferencia hay entre coche manual y automático? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">En un coche automático no hay pedal de embrague y la caja de cambios gestiona sola las marchas. El carnet obtenido en automático no permite conducir manual. En España la mayoría de los coches siguen siendo manuales, por lo que sacar el carnet en manual te permite conducir cualquier tipo de vehículo.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Este simulador es gratis? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">Sí, Cambia de Marcha es completamente gratuito. No necesitas registrarte, no hay suscripciones ni pagos. Funciona directamente desde el navegador en cualquier ordenador con teclado.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Funciona en móvil o tablet? <span class="faq-arrow">▼</span></summary>
+        <div class="faq-a">Actualmente el simulador está optimizado para ordenador con teclado. En tablet y móvil la web se puede ver pero la experiencia de juego es limitada. Estamos trabajando en una versión táctil para dispositivos móviles próximamente.</div>
+      </details>
+</div>
+  </div>
+</div>
+
+<!-- AD -->
+<div class="ad-wrap">
+  <ins class="adsbygoogle" style="display:block"
+    data-ad-client="ca-pub-9881186716073145" data-ad-slot="auto"
+    data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<footer>
+  <span class="footer-copy">© 2025 CAMBIADEMARCHA.ES — TODOS LOS DERECHOS RESERVADOS</span>
+  <div class="footer-links">
+    <a href="aviso-legal.html">Aviso legal</a>
+    <a href="privacidad.html">Privacidad</a>
+    <a href="cookies.html">Cookies</a>
+    <a href="javascript:void(0)" onclick="window.location='mai'+'lto:ilargiadesigns'+'@gmail.com'">Contacto</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function toggleFaq(btn){
+  const a = btn.nextElementSibling;
+  const open = btn.classList.contains('open');
+  document.querySelectorAll('.faq-q.open').forEach(b=>{
+    b.classList.remove('open'
